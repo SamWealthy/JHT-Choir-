@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup Singers List Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        textarea, input[type="datetime-local"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #clearHistoryButton {
+            background-color: #dc3545;
+        }
+        #clearHistoryButton:hover {
+            background-color: #b02a37;
+        }
+        #copyButton:disabled, #clearHistoryButton:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #output {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        #manualCopy {
+            margin-top: 10px;
+            display: none;
+        }
+        #manualCopy textarea {
+            width: 100%;
+            height: 100px;
+            font-family: monospace;
+        }
+        #history {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #history h2 {
+            margin-top: 0;
+        }
+        .history-entry {
+            margin-bottom: 20px;
+        }
+        .history-entry pre {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            textarea, input[type="datetime-local"] {
+                font-size: 14px;
+            }
+            .button-container {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>JHT Choir Weekly Backup Singers List</h1>
+    <form id="singerForm">
+        <label for="timestamp">Select Date and Time for List (optional):</label>
+        <input type="datetime-local" id="timestamp">
+
+        <label for="firstPraise">FIRST SERVICE PRAISE AND WORSHIP (Enter names, one per line):</label>
+        <textarea id="firstPraise" rows="4" placeholder="e.g. Alice Johnson\nBob Smith"></textarea>
+
+        <label for="firstSpecial">FIRST SERVICE SPECIAL NO (Enter names, one per line):</label>
+        <textarea id="firstSpecial" rows="4" placeholder="e.g. Carol Davis\nDavid Wilson"></textarea>
+
+        <label for="secondPraise">SECOND SERVICE PRAISE AND WORSHIP (Enter names, one per line):</label>
+        <textarea id="secondPraise" rows="4" placeholder="e.g. Emma Brown\nFrank Miller"></textarea>
+
+        <label for="secondSpecial">SECOND SERVICE SPECIAL NO (Enter names, one per line):</label>
+        <textarea id="secondSpecial" rows="4" placeholder="e.g. Grace Lee\nHenry Taylor"></textarea>
+
+        <div class="button-container">
+            <button type="button" onclick="generateList()">Generate List</button>
+            <button type="button" id="copyButton" onclick="copyToClipboard()" disabled>Copy to Clipboard</button>
+            <button type="button" id="clearHistoryButton" onclick="clearHistory()">Clear History</button>
+        </div>
+    </form>
+
+    <div id="output"></div>
+    <div id="manualCopy">
+        <p>Clipboard access failed. Select and copy the text below manually:</p>
+        <textarea id="manualCopyText" readonly></textarea>
+    </div>
+    <div id="history"></div>
+
+    <script>
+        let outputText = '';
+
+        function generateList() {
+            const timestampInput = document.getElementById('timestamp').value;
+            const timestamp = timestampInput ? new Date(timestampInput).toISOString() : new Date().toISOString();
+            const firstPraise = document.getElementById('firstPraise').value.trim().split('\n').filter(name => name.trim());
+            const firstSpecial = document.getElementById('firstSpecial').value.trim().split('\n').filter(name => name.trim());
+            const secondPraise = document.getElementById('secondPraise').value.trim().split('\n').filter(name => name.trim());
+            const secondSpecial = document.getElementById('secondSpecial').value.trim().split('\n').filter(name => name.trim());
+
+            outputText = '';
+
+            if (firstPraise.length > 0) {
+                outputText += 'FIRST SERVICE PRAISE AND WORSHIP:\n';
+                firstPraise.forEach(name => {
+                    outputText += `  - ${name.trim()}\n`;
+                });
+                outputText += '\n';
+            }
+
+            if (firstSpecial.length > 0) {
+                outputText += 'FIRST SERVICE SPECIAL NO:\n';
+                firstSpecial.forEach(name => {
+                    outputText += `  - ${name.trim()}\n`;
+                });
+                outputText += '\n';
+            }
+
+            if (secondPraise.length > 0) {
+                outputText += 'SECOND SERVICE PRAISE AND WORSHIP:\n';
+                secondPraise.forEach(name => {
+                    outputText += `  - ${name.trim()}\n`;
+                });
+                outputText += '\n';
+            }
+
+            if (secondSpecial.length > 0) {
+                outputText += 'SECOND SERVICE SPECIAL NO:\n';
+                secondSpecial.forEach(name => {
+                    outputText += `  - ${name.trim()}\n`;
+                });
+            }
+
+            document.getElementById('output').innerText = outputText || 'No names entered.';
+            document.getElementById('copyButton').disabled = !outputText;
+            document.getElementById('manualCopy').style.display = 'none';
+
+            if (outputText) {
+                saveToHistory(outputText, timestamp);
+            }
+            displayHistory();
+        }
+
+        function copyToClipboard() {
+            if (!outputText) return;
+
+            // Hide manual copy textarea initially
+            const manualCopyDiv = document.getElementById('manualCopy');
+            manualCopyDiv.style.display = 'none';
+
+            // Try modern Clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(outputText).then(() => {
+                    alert('List copied to clipboard!');
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopyToClipboard(outputText);
+                });
+            } else {
+                // Fallback for browsers without Clipboard API
+                fallbackCopyToClipboard(outputText);
+            }
+        }
+
+        function fallbackCopyToClipboard(text) {
+            try {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                if (success) {
+                    alert('List copied to clipboard!');
+                } else {
+                    showManualCopy(text);
+                }
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                showManualCopy(text);
+            }
+        }
+
+        function showManualCopy(text) {
+            const manualCopyDiv = document.getElementById('manualCopy');
+            const manualCopyText = document.getElementById('manualCopyText');
+            manualCopyText.value = text;
+            manualCopyDiv.style.display = 'block';
+            alert('Clipboard access failed. Please select and copy the text manually from the textarea below.');
+        }
+
+        function saveToHistory(text, timestamp) {
+            let history = JSON.parse(localStorage.getItem('singerHistory') || '[]');
+            history.unshift({ timestamp, text });
+            // Keep only entries from the last 14 days
+            const twoWeeksAgo = new Date();
+            twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+            history = history.filter(entry => new Date(entry.timestamp) >= twoWeeksAgo);
+            // Limit to 2 entries
+            history = history.slice(0, 2);
+            localStorage.setItem('singerHistory', JSON.stringify(history));
+        }
+
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem('singerHistory') || '[]');
+            let historyHtml = '<h2>History (Last 2 Weeks)</h2>';
+            if (history.length === 0) {
+                historyHtml += '<p>No history available.</p>';
+            } else {
+                history.forEach(entry => {
+                    const date = new Date(entry.timestamp).toLocaleString();
+                    historyHtml += `<div class="history-entry"><h3>Generated on ${date}</h3><pre>${entry.text}</pre></div>`;
+                });
+            }
+            document.getElementById('history').innerHTML = historyHtml;
+            document.getElementById('clearHistoryButton').disabled = history.length === 0;
+        }
+
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear the history?')) {
+                localStorage.removeItem('singerHistory');
+                displayHistory();
+                alert('History cleared!');
+            }
+        }
+
+        // Load history when the page loads
+        window.onload = displayHistory;
+    </script>
+</body>
+</html>
