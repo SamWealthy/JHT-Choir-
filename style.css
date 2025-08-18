@@ -1,0 +1,198 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root{
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --primary-600:#1d4ed8;
+  --success:#16a34a;
+  --success-600:#15803d;
+  --danger:#dc2626;
+  --danger-700:#b91c1c;
+  --ring: rgba(37,99,235,.25);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  padding:0; margin:0;
+  background: radial-gradient(1200px 600px at 80% -200px, #eef2ff 0%, transparent 60%) , var(--bg);
+  color: var(--text);
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+body{
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1{
+  text-align:center;
+  font-weight:600;
+  margin: 0 0 18px;
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+}
+
+form, #output, #history{
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  padding: 22px;
+}
+
+form{ transition: transform .18s ease, box-shadow .18s ease; }
+form:hover{ transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+
+label{
+  display:block;
+  margin-top:16px;
+  font-weight:600;
+  font-size:.95rem;
+}
+
+textarea,
+input[type="datetime-local"]{
+  width:100%;
+  margin-top:6px;
+  padding:12px 12px;
+  border:1px solid #e5e7eb;
+  border-radius: 10px;
+  background:#fff;
+  font-size:.95rem;
+  outline: none;
+  transition: box-shadow .15s, border-color .15s;
+}
+
+textarea:focus,
+input[type="datetime-local"]:focus{
+  border-color: var(--primary);
+  box-shadow: 0 0 0 6px var(--ring);
+}
+
+textarea{ resize:vertical; min-height: 110px; }
+
+.button-container{
+  margin-top:22px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+button{
+  flex:1 1 180px;
+  padding:12px 14px;
+  border:none;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  font-size:.95rem;
+  transition: transform .08s ease, filter .15s ease, background .15s ease;
+  will-change: transform;
+}
+
+button:active{ transform: translateY(1px) scale(.99); }
+
+button:disabled{
+  background:#e5e7eb !important;
+  color:#9ca3af !important;
+  cursor:not-allowed;
+  filter:none !important;
+}
+
+/* First button (Generate) */
+.button-container > button:first-child{
+  background: var(--primary);
+  color:#fff;
+}
+.button-container > button:first-child:hover:not(:disabled){
+  background: var(--primary-600);
+  filter: brightness(1.02);
+}
+
+/* Copy button */
+#copyButton{ background: var(--success); color:#fff; }
+#copyButton:hover:not(:disabled){ background: var(--success-600); }
+
+/* Clear history button */
+#clearHistoryButton{ background: var(--danger); color:#fff; }
+#clearHistoryButton:hover:not(:disabled){ background: var(--danger-700); }
+
+#output{
+  margin-top:18px;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  line-height:1.55;
+  border:1px dashed #e5e7eb;
+}
+
+#manualCopy{
+  margin-top:10px;
+  display:none;
+}
+#manualCopy textarea{
+  width:100%;
+  height:110px;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  padding:10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+#history{ margin-top:22px; }
+#history h2{
+  margin:0 0 10px;
+  font-size:1.1rem;
+  border-bottom:2px solid #eef2ff;
+  padding-bottom:8px;
+}
+.history-entry{
+  margin-bottom:16px;
+  padding:12px;
+  background:#f8fafc;
+  border-left:4px solid var(--primary);
+  border-radius:10px;
+}
+.history-entry h3{ margin:0 0 6px; font-size:.95rem; color: var(--muted); }
+.history-entry pre{
+  margin:0;
+  background:#fff;
+  border:1px solid #eef2ff;
+  border-radius:8px;
+  padding:10px;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Toasts */
+.toast-container{
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display:flex;
+  flex-direction: column;
+  gap:10px;
+  z-index: 9999;
+}
+.toast{
+  background:#111827;
+  color:#fff;
+  padding:10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+  font-size:.92rem;
+  opacity:0;
+  transform: translateY(10px);
+  animation: toast-in .2s ease forwards, toast-out .25s ease 2.3s forwards;
+}
+@keyframes toast-in{ to{ opacity:1; transform: translateY(0);} }
+@keyframes toast-out{ to{ opacity:0; transform: translateY(6px);} }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; animation:none !important; }
+}
