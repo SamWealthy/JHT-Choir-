@@ -1,68 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="styles.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Backup Singers List Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    /* Google Font for a modern look */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    :root {
+      --primary: #4361ee;
+      --primary-hover: #3a56d4;
+      --success: #4cc9f0;
+      --success-hover: #38b5db;
+      --danger: #f72585;
+      --danger-hover: #e5177b;
+      --warning: #f8961e;
+      --warning-hover: #e07f0e;
+      --text: #2b2d42;
+      --text-light: #8d99ae;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --border: #e9ecef;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --max-width: 1000px;
+    }
+
+    .dark-mode {
+      --primary: #4895ef;
+      --primary-hover: #3a7bc8;
+      --success: #4cc9f0;
+      --success-hover: #38b5db;
+      --danger: #f72585;
+      --danger-hover: #e5177b;
+      --warning: #f8961e;
+      --warning-hover: #e07f0e;
+      --text: #f8f9fa;
+      --text-light: #adb5bd;
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --border: #2d2d2d;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-      margin: 0;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
       padding: 20px;
-      color: #333;
+      transition: var(--transition);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
     }
 
     h1 {
-      text-align: center;
-      font-weight: 600;
-      color: #222;
-      margin-bottom: 25px;
-      font-size: 1.8rem;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #4361ee, #4cc9f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+      margin-bottom: 0;
     }
 
-    form {
-      background: #fff;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease;
+    .dark-mode h1 {
+      background: linear-gradient(90deg, #4895ef, #4cc9f0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    form:hover {
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }
+
+    .theme-toggle:hover {
       transform: translateY(-2px);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: var(--max-width);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .dark-mode .card:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     }
 
     label {
       display: block;
-      margin-top: 18px;
+      margin-bottom: 8px;
       font-weight: 600;
+      color: var(--text);
       font-size: 0.95rem;
-      color: #444;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
     }
 
     textarea, input[type="datetime-local"] {
       width: 100%;
-      padding: 10px 12px;
-      margin-top: 6px;
-      border: 1px solid #d0d0d0;
-      border-radius: 8px;
-      box-sizing: border-box;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background-color: var(--card-bg);
+      color: var(--text);
+      font-family: inherit;
       font-size: 0.95rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: var(--transition);
     }
 
     textarea:focus, input[type="datetime-local"]:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 6px rgba(0,123,255,0.2);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
       outline: none;
     }
 
     textarea {
+      min-height: 100px;
       resize: vertical;
     }
 
@@ -75,159 +181,474 @@
 
     button {
       flex: 1;
-      padding: 12px;
+      padding: 12px 20px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       font-size: 0.95rem;
-      transition: all 0.2s ease;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 150px;
     }
 
     button:disabled {
-      background-color: #d6d6d6;
-      color: #777;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
-    button:nth-child(1) {
-      background: #007bff;
+    .btn-primary {
+      background-color: var(--primary);
       color: white;
-    }
-    button:nth-child(1):hover:enabled {
-      background: #0056b3;
     }
 
-    #copyButton {
-      background: #28a745;
-      color: white;
-    }
-    #copyButton:hover:enabled {
-      background: #1e7e34;
+    .btn-primary:hover:enabled {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    #clearHistoryButton {
-      background: #dc3545;
+    .btn-success {
+      background-color: var(--success);
       color: white;
     }
-    #clearHistoryButton:hover:enabled {
-      background: #a71d2a;
+
+    .btn-success:hover:enabled {
+      background-color: var(--success-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover:enabled {
+      background-color: var(--danger-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+      color: white;
+    }
+
+    .btn-warning:hover:enabled {
+      background-color: var(--warning-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     #output {
       margin-top: 25px;
-      background: #fff;
+      background-color: var(--card-bg);
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      box-shadow: var(--shadow);
       white-space: pre-wrap;
-      font-family: monospace;
+      font-family: 'Fira Code', monospace;
       line-height: 1.5;
+      border: 1px solid var(--border);
+      min-height: 100px;
+      position: relative;
+    }
+
+    #output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #output-title {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    #output-content {
+      font-family: 'Fira Code', monospace;
+      white-space: pre-wrap;
     }
 
     #manualCopy {
       margin-top: 15px;
       display: none;
     }
+
+    #manualCopy p {
+      margin-bottom: 10px;
+      color: var(--text-light);
+    }
+
     #manualCopy textarea {
       width: 100%;
-      height: 100px;
-      font-family: monospace;
+      height: 120px;
+      font-family: 'Fira Code', monospace;
       border-radius: 8px;
-      padding: 10px;
-    }
-
-    #history {
-      margin-top: 30px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
-
-    #history h2 {
-      margin-top: 0;
-      font-size: 1.2rem;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 8px;
+      padding: 12px;
     }
 
     .history-entry {
       margin-bottom: 20px;
-      padding: 12px;
-      border-left: 4px solid #007bff;
-      background: #f9f9ff;
-      border-radius: 8px;
-      transition: background 0.2s;
+      padding: 20px;
+      border-left: 4px solid var(--primary);
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      transition: var(--transition);
+      border: 1px solid var(--border);
     }
 
     .history-entry:hover {
-      background: #f1f1ff;
+      transform: translateX(5px);
+    }
+
+    .history-entry h3 {
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-size: 0.95rem;
     }
 
     .history-entry pre {
       white-space: pre-wrap;
-      font-family: monospace;
-      background: #fff;
-      padding: 10px;
+      font-family: 'Fira Code', monospace;
+      background-color: var(--bg);
+      padding: 15px;
       border-radius: 8px;
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-      margin-top: 6px;
+      color: var(--text);
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 600px) {
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      opacity: 0.6;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--card-bg);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.error {
+      border-left-color: var(--danger);
+    }
+
+    .share-options {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .share-options.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .share-container {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      text-align: center;
+    }
+
+    .share-container h3 {
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .share-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .share-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg);
+      border-radius: 10px;
+      padding: 15px;
+      width: 80px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      color: var(--text);
+    }
+
+    .share-button:hover {
+      transform: translateY(-3px);
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .share-button i {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .share-button span {
+      font-size: 0.8rem;
+    }
+
+    .close-share {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .share-container {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .share-button {
+        width: 70px;
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
       h1 {
         font-size: 1.4rem;
       }
-      textarea, input[type="datetime-local"] {
-        font-size: 14px;
+
+      body {
+        padding: 15px;
       }
-      .button-container {
-        flex-direction: column;
-        gap: 10px;
+
+      .share-buttons {
+        gap: 8px;
+      }
+
+      .share-button {
+        width: 60px;
+        padding: 10px;
+      }
+
+      .share-button i {
+        font-size: 1.5rem;
       }
     }
   </style>
 </head>
-<script defer src="app.js"></script>
 <body>
-  <h1>🎶 JHT Choir Weekly Backup Singers List</h1>
-  <form id="singerForm">
-    <label for="timestamp">Select Date and Time for List (optional):</label>
-    <input type="datetime-local" id="timestamp">
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-music"></i> JHT Choir Backup Singers</h1>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </header>
 
-    <label for="firstPraise">FIRST SERVICE PRAISE AND WORSHIP (Enter names, one per line):</label>
-    <textarea id="firstPraise" rows="4" placeholder="e.g. Alice Johnson\nBob Smith"></textarea>
+    <div class="card">
+      <form id="singerForm">
+        <div class="input-group">
+          <label for="timestamp"><i class="far fa-calendar-alt"></i> Select Date and Time (optional)</label>
+          <input type="datetime-local" id="timestamp">
+        </div>
 
-    <label for="firstSpecial">FIRST SERVICE SPECIAL NO (Enter names, one per line):</label>
-    <textarea id="firstSpecial" rows="4" placeholder="e.g. Carol Davis\nDavid Wilson"></textarea>
+        <div class="input-group">
+          <label for="firstPraise"><i class="fas fa-users"></i> FIRST SERVICE PRAISE AND WORSHIP</label>
+          <textarea id="firstPraise" rows="4" placeholder="Enter names, one per line&#10;e.g. Alice Johnson&#10;Bob Smith"></textarea>
+        </div>
 
-    <label for="secondPraise">SECOND SERVICE PRAISE AND WORSHIP (Enter names, one per line):</label>
-    <textarea id="secondPraise" rows="4" placeholder="e.g. Emma Brown\nFrank Miller"></textarea>
+        <div class="input-group">
+          <label for="firstSpecial"><i class="fas fa-star"></i> FIRST SERVICE SPECIAL NO</label>
+          <textarea id="firstSpecial" rows="4" placeholder="Enter names, one per line&#10;e.g. Carol Davis&#10;David Wilson"></textarea>
+        </div>
 
-    <label for="secondSpecial">SECOND SERVICE SPECIAL NO (Enter names, one per line):</label>
-    <textarea id="secondSpecial" rows="4" placeholder="e.g. Grace Lee\nHenry Taylor"></textarea>
+        <div class="input-group">
+          <label for="secondPraise"><i class="fas fa-users"></i> SECOND SERVICE PRAISE AND WORSHIP</label>
+          <textarea id="secondPraise" rows="4" placeholder="Enter names, one per line&#10;e.g. Emma Brown&#10;Frank Miller"></textarea>
+        </div>
 
-    <div class="button-container">
-      <button type="button" onclick="generateList()">Generate List</button>
-      <button type="button" id="copyButton" onclick="copyToClipboard()" disabled>Copy to Clipboard</button>
-      <button type="button" id="clearHistoryButton" onclick="clearHistory()">Clear History</button>
+        <div class="input-group">
+          <label for="secondSpecial"><i class="fas fa-star"></i> SECOND SERVICE SPECIAL NO</label>
+          <textarea id="secondSpecial" rows="4" placeholder="Enter names, one per line&#10;e.g. Grace Lee&#10;Henry Taylor"></textarea>
+        </div>
+
+        <div class="button-container">
+          <button type="button" class="btn-primary" onclick="generateList()">
+            <i class="fas fa-magic"></i> Generate List
+          </button>
+          <button type="button" class="btn-success" id="copyButton" onclick="copyToClipboard()" disabled>
+            <i class="far fa-copy"></i> Copy
+          </button>
+          <button type="button" class="btn-warning" id="shareButton" onclick="showShareOptions()" disabled>
+            <i class="fas fa-share-alt"></i> Share
+          </button>
+          <button type="button" class="btn-danger" id="clearHistoryButton" onclick="clearHistory()">
+            <i class="far fa-trash-alt"></i> Clear
+          </button>
+        </div>
+      </form>
     </div>
-  </form>
 
-  <div id="output"></div>
-  <div id="manualCopy">
-    <p>Clipboard access failed. Select and copy the text below manually:</p>
-    <textarea id="manualCopyText" readonly></textarea>
+    <div class="card">
+      <div id="output">
+        <div id="output-header">
+          <div id="output-title">JHT Choir Backup Singers</div>
+          <div id="output-date"></div>
+        </div>
+        <div id="output-content">Your generated list will appear here...</div>
+      </div>
+      <div id="manualCopy">
+        <p><i class="fas fa-exclamation-triangle"></i> Clipboard access failed. Select and copy the text below manually:</p>
+        <textarea id="manualCopyText" readonly></textarea>
+      </div>
+    </div>
+
+    <div class="card" id="history">
+      <h2><i class="fas fa-history"></i> History (Last 2 Weeks)</h2>
+      <div class="empty-state">
+        <i class="far fa-clock"></i>
+        <p>No history available</p>
+      </div>
+    </div>
   </div>
-  <div id="history"></div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="share-options" id="shareOptions">
+    <button class="close-share" onclick="hideShareOptions()">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="share-container">
+      <h3>Share List As Image</h3>
+      <div class="share-buttons">
+        <button class="share-button" onclick="shareViaWhatsApp()">
+          <i class="fab fa-whatsapp"></i>
+          <span>WhatsApp</span>
+        </button>
+        <button class="share-button" onclick="shareViaEmail()">
+          <i class="fas fa-envelope"></i>
+          <span>Email</span>
+        </button>
+        <button class="share-button" onclick="downloadImage()">
+          <i class="fas fa-download"></i>
+          <span>Download</span>
+        </button>
+        <button class="share-button" onclick="copyImageToClipboard()">
+          <i class="far fa-copy"></i>
+          <span>Copy Image</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
+    // Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Check for saved theme preference or use system preference
+    const currentTheme = localStorage.getItem('theme') || 
+                        (prefersDarkScheme.matches ? 'dark' : 'light');
+    
+    if (currentTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+      
+      if (theme === 'dark') {
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    });
+
+    // Toast notification
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${message}`;
+      toast.className = isError ? 'toast error show' : 'toast show';
+      
+      setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+      }, 3000);
+    }
+
     let outputText = '';
+    let currentTimestamp = '';
 
     function generateList() {
       const timestampInput = document.getElementById('timestamp').value;
-      const timestamp = timestampInput ? new Date(timestampInput).toISOString() : new Date().toISOString();
+      currentTimestamp = timestampInput ? new Date(timestampInput).toISOString() : new Date().toISOString();
       const firstPraise = document.getElementById('firstPraise').value.trim().split('\n').filter(name => name.trim());
       const firstSpecial = document.getElementById('firstSpecial').value.trim().split('\n').filter(name => name.trim());
       const secondPraise = document.getElementById('secondPraise').value.trim().split('\n').filter(name => name.trim());
@@ -238,7 +659,7 @@
       if (firstPraise.length > 0) {
         outputText += 'FIRST SERVICE PRAISE AND WORSHIP:\n';
         firstPraise.forEach(name => {
-          outputText += `  - ${name.trim()}\n`;
+          outputText += `  • ${name.trim()}\n`;
         });
         outputText += '\n';
       }
@@ -246,7 +667,7 @@
       if (firstSpecial.length > 0) {
         outputText += 'FIRST SERVICE SPECIAL NO:\n';
         firstSpecial.forEach(name => {
-          outputText += `  - ${name.trim()}\n`;
+          outputText += `  • ${name.trim()}\n`;
         });
         outputText += '\n';
       }
@@ -254,7 +675,7 @@
       if (secondPraise.length > 0) {
         outputText += 'SECOND SERVICE PRAISE AND WORSHIP:\n';
         secondPraise.forEach(name => {
-          outputText += `  - ${name.trim()}\n`;
+          outputText += `  • ${name.trim()}\n`;
         });
         outputText += '\n';
       }
@@ -262,34 +683,46 @@
       if (secondSpecial.length > 0) {
         outputText += 'SECOND SERVICE SPECIAL NO:\n';
         secondSpecial.forEach(name => {
-          outputText += `  - ${name.trim()}\n`;
+          outputText += `  • ${name.trim()}\n`;
         });
       }
 
-      document.getElementById('output').innerText = outputText || 'No names entered.';
+      const outputElement = document.getElementById('output-content');
+      outputElement.innerText = outputText || 'No names entered.';
+      
+      // Update the date display
+      const dateElement = document.getElementById('output-date');
+      const date = new Date(currentTimestamp);
+      dateElement.textContent = date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
       document.getElementById('copyButton').disabled = !outputText;
+      document.getElementById('shareButton').disabled = !outputText;
       document.getElementById('manualCopy').style.display = 'none';
 
       if (outputText) {
-        saveToHistory(outputText, timestamp);
+        saveToHistory(outputText, currentTimestamp);
+        showToast('List generated successfully!');
       }
+      
       displayHistory();
     }
 
-    function copyToClipboard() {
+    async function copyToClipboard() {
       if (!outputText) return;
 
       const manualCopyDiv = document.getElementById('manualCopy');
       manualCopyDiv.style.display = 'none';
 
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(outputText).then(() => {
-          alert('✅ List copied to clipboard!');
-        }).catch(err => {
-          console.error('Clipboard API failed:', err);
-          fallbackCopyToClipboard(outputText);
-        });
-      } else {
+      try {
+        await navigator.clipboard.writeText(outputText);
+        showToast('✅ List copied to clipboard!');
+      } catch (err) {
+        console.error('Clipboard API failed:', err);
         fallbackCopyToClipboard(outputText);
       }
     }
@@ -306,7 +739,7 @@
         const success = document.execCommand('copy');
         document.body.removeChild(textarea);
         if (success) {
-          alert('✅ List copied to clipboard!');
+          showToast('✅ List copied to clipboard!');
         } else {
           showManualCopy(text);
         }
@@ -321,43 +754,206 @@
       const manualCopyText = document.getElementById('manualCopyText');
       manualCopyText.value = text;
       manualCopyDiv.style.display = 'block';
-      alert('⚠️ Clipboard access failed. Please copy manually.');
+      showToast('⚠️ Please copy manually', true);
     }
 
     function saveToHistory(text, timestamp) {
       let history = JSON.parse(localStorage.getItem('singerHistory') || '[]');
       history.unshift({ timestamp, text });
+      
+      // Keep only entries from last 2 weeks and max 5 entries
       const twoWeeksAgo = new Date();
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+      
       history = history.filter(entry => new Date(entry.timestamp) >= twoWeeksAgo);
-      history = history.slice(0, 2);
+      history = history.slice(0, 5);
+      
       localStorage.setItem('singerHistory', JSON.stringify(history));
     }
 
     function displayHistory() {
       const history = JSON.parse(localStorage.getItem('singerHistory') || '[]');
-      let historyHtml = '<h2>History (Last 2 Weeks)</h2>';
+      const historyContainer = document.getElementById('history');
+      
       if (history.length === 0) {
-        historyHtml += '<p>No history available.</p>';
-      } else {
-        history.forEach(entry => {
-          const date = new Date(entry.timestamp).toLocaleString();
-          historyHtml += `<div class="history-entry"><h3>Generated on ${date}</h3><pre>${entry.text}</pre></div>`;
-        });
+        historyContainer.innerHTML = `
+          <h2><i class="fas fa-history"></i> History (Last 2 Weeks)</h2>
+          <div class="empty-state">
+            <i class="far fa-clock"></i>
+            <p>No history available</p>
+          </div>
+        `;
+        document.getElementById('clearHistoryButton').disabled = true;
+        return;
       }
-      document.getElementById('history').innerHTML = historyHtml;
-      document.getElementById('clearHistoryButton').disabled = history.length === 0;
+      
+      let historyHtml = `
+        <h2><i class="fas fa-history"></i> History (Last 2 Weeks)</h2>
+      `;
+      
+      history.forEach(entry => {
+        const date = new Date(entry.timestamp);
+        const formattedDate = date.toLocaleString('en-US', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        historyHtml += `
+          <div class="history-entry">
+            <h3><i class="far fa-calendar"></i> Generated on ${formattedDate}</h3>
+            <pre>${entry.text}</pre>
+          </div>
+        `;
+      });
+      
+      historyContainer.innerHTML = historyHtml;
+      document.getElementById('clearHistoryButton').disabled = false;
     }
 
     function clearHistory() {
-      if (confirm('Are you sure you want to clear the history?')) {
+      if (confirm('Are you sure you want to clear all history?')) {
         localStorage.removeItem('singerHistory');
         displayHistory();
-        alert('🗑️ History cleared!');
+        showToast('🗑️ History cleared!');
       }
     }
 
-    window.onload = displayHistory;
+    // Share functionality
+    function showShareOptions() {
+      document.getElementById('shareOptions').classList.add('show');
+    }
+
+    function hideShareOptions() {
+      document.getElementById('shareOptions').classList.remove('show');
+    }
+
+    function captureOutput() {
+      return new Promise((resolve) => {
+        const outputElement = document.getElementById('output');
+        
+        // Temporarily hide the manual copy section if visible
+        const manualCopy = document.getElementById('manualCopy');
+        const manualCopyDisplay = manualCopy.style.display;
+        manualCopy.style.display = 'none';
+        
+        html2canvas(outputElement, {
+          backgroundColor: getComputedStyle(document.body).getPropertyValue('--card-bg'),
+          scale: 2, // Higher quality
+          logging: false,
+          useCORS: true
+        }).then(canvas => {
+          // Restore manual copy display
+          manualCopy.style.display = manualCopyDisplay;
+          
+          // Convert canvas to blob
+          canvas.toBlob(blob => {
+            resolve(blob);
+          }, 'image/png');
+        });
+      });
+    }
+
+    async function shareViaWhatsApp() {
+      try {
+        const blob = await captureOutput();
+        const file = new File([blob], 'choir-list.png', { type: 'image/png' });
+        
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'JHT Choir Backup Singers List',
+            text: 'Here is the backup singers list for the service:'
+          });
+        } else {
+          // Fallback for browsers that don't support sharing files
+          const dataUrl = await blobToDataURL(blob);
+          window.open(`https://wa.me/?text=${encodeURIComponent('JHT Choir Backup Singers List')}&text=${encodeURIComponent(outputText)}`, '_blank');
+        }
+      } catch (err) {
+        console.error('Error sharing:', err);
+        showToast('Failed to share via WhatsApp', true);
+      } finally {
+        hideShareOptions();
+      }
+    }
+
+    async function shareViaEmail() {
+      try {
+        const blob = await captureOutput();
+        const dataUrl = await blobToDataURL(blob);
+        const date = new Date(currentTimestamp).toLocaleDateString();
+        
+        const mailtoLink = `mailto:?subject=JHT Choir Backup Singers - ${date}&body=${encodeURIComponent(outputText)}`;
+        window.location.href = mailtoLink;
+      } catch (err) {
+        console.error('Error sharing via email:', err);
+        showToast('Failed to share via email', true);
+      } finally {
+        hideShareOptions();
+      }
+    }
+
+    async function downloadImage() {
+      try {
+        const blob = await captureOutput();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `choir-list-${new Date(currentTimestamp).toISOString().split('T')[0]}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+        showToast('Image downloaded!');
+      } catch (err) {
+        console.error('Error downloading image:', err);
+        showToast('Failed to download image', true);
+      } finally {
+        hideShareOptions();
+      }
+    }
+
+    async function copyImageToClipboard() {
+      try {
+        const blob = await captureOutput();
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            [blob.type]: blob
+          })
+        ]);
+        showToast('Image copied to clipboard!');
+      } catch (err) {
+        console.error('Error copying image:', err);
+        showToast('Failed to copy image to clipboard', true);
+      } finally {
+        hideShareOptions();
+      }
+    }
+
+    function blobToDataURL(blob) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      displayHistory();
+      
+      // Add current datetime as default if empty
+      const datetimeInput = document.getElementById('timestamp');
+      if (!datetimeInput.value) {
+        const now = new Date();
+        const timezoneOffset = now.getTimezoneOffset() * 60000;
+        const localISOTime = new Date(now - timezoneOffset).toISOString().slice(0, 16);
+        datetimeInput.value = localISOTime;
+      }
+    });
   </script>
 </body>
 </html>
